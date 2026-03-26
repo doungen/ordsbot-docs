@@ -22,14 +22,14 @@ Supported wallets:
 
 ## Step 2 — Derive your bidding wallet
 
-The bidding bot needs keys in memory to sign bid messages on Satflow. Go to **Settings → Wallet** and enter your seed phrase.
+The bidding bot needs signing keys in memory to place bids on Satflow. Go to **Settings → Wallet** and enter your seed phrase.
 
 <Warning>
-Your seed phrase is used only to derive keys in server memory. It is **never stored** to disk or database. The server must re-derive after a restart — you will be prompted automatically.
+Your seed phrase is entered in your browser only. All key derivation happens locally in your browser — only the private signing keys are sent to the bot's server memory for automated bid signing. Your seed phrase never leaves your device. Keys are held in server RAM only and are lost on restart — you will be prompted to re-derive automatically.
 </Warning>
 
 After deriving, you'll see:
-- **Payment address** (bc1q...) — fund this with sats for your bids
+- **Payment address** (bc1q...) — your native SegWit address
 - **Ordinals address** (bc1p...) — your taproot address for inscriptions
 - **Bidding wallet** — the Satflow multi-sig address where bid collateral is held
 
@@ -45,11 +45,11 @@ Don't have one? [Open a ticket on Satflow Discord](https://discord.gg/satflow) t
 
 ## Step 4 — Fund your bidding wallet
 
-Send Bitcoin to your **Payment address** (bc1q...). The bot uses this to fund bids on Satflow's multi-sig bidding system.
+After deriving your wallet, your **Satflow bidding address** is shown in **Settings → Wallet**. This is a Satflow-managed multi-sig address — send Bitcoin here to fund your bids.
 
-A rough guide for getting started:
-- **Single collection, 5 bids**: ~500,000–1,000,000 sats
-- **Multiple collections**: scale accordingly per your `maxBidTotal` settings
+<Note>
+You can also check your bidding address at any time in the Settings page after wallet setup.
+</Note>
 
 ---
 

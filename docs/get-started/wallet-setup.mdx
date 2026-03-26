@@ -39,7 +39,7 @@ The bidding bot requires keys in server memory to sign Satflow bid messages. The
 | Ordinals key | BIP86 (m/86'/0'/0'/0/0) | Taproot key for inscriptions |
 
 <Warning>
-Your seed phrase is used **only** to derive keys into server RAM. It is never written to disk or the database. If the server restarts, you need to re-derive — you will see a "Waiting for wallet keys" warning on your tasks.
+All key derivation happens locally in your browser — your seed phrase never leaves your device. Only the private signing keys are sent to the bot's server memory so the worker can sign bids automatically. Keys are never written to disk or the database. If the server restarts, you need to re-derive — you will see a "Waiting for wallet keys" warning on your tasks.
 </Warning>
 
 ### What the bot uses your keys for
@@ -49,12 +49,6 @@ Your seed phrase is used **only** to derive keys into server RAM. It is never wr
   <payment_addr>:<payment_pubkey>:<token_receive_addr>:<price>:<quantity>:<expiry>:<slug>:<timestamp>
   ```
 - Signing PSBTs for auto-listing inscriptions (Taproot Schnorr signatures)
-
----
-
-## Address Aliases
-
-If you have multiple addresses from the same seed (e.g. a Segwit payment address and a Taproot ordinals address), you can link them to the same account. Contact the admin to configure address aliases.
 
 ---
 
@@ -68,5 +62,4 @@ Satflow uses a **bidding wallet** model where your bid collateral is held in a 2
 
 - The bot only needs your seed phrase once per server session
 - Sessions use secure, signed tokens stored in server memory
-- `SESSION_SECRET` should be set in the server environment to survive restarts
 - There is no password recovery — if you lose your seed phrase, you lose your wallet
