@@ -7,7 +7,7 @@ description: "How wallet authentication and key derivation work in OrdsBot"
 
 OrdsBot uses a **two-layer wallet architecture**:
 
-1. **Sign-in wallet** — any Bitcoin wallet (Xverse, Unisat) used to authenticate via BIP-322 message signing
+1. **Sign-in wallet** — Xverse, Unisat, or Leather — used to authenticate via BIP-322 message signing
 2. **Bidding keys** — derived in-memory from your seed phrase, used by the bot to sign bid messages
 
 These are typically from the same seed phrase but can be different addresses.

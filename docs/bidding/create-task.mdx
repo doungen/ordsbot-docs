@@ -93,6 +93,10 @@ For Runes, prices are in **sats per token** (can be fractional, e.g. `1.08`).
 
 The number of simultaneous bids to maintain. The bot will cancel and re-place bids to keep exactly this many active.
 
+<Note>
+**Ordinals tasks always use bid count = 1.** Multiple ordinals bids share one UTXO and cause ghost bids on Satflow. Bid count > 1 only applies to **Rune tasks**.
+</Note>
+
 - Max per plan: Basic=5, Pro=20, Whale=50
 
 ---

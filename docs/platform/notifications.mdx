@@ -1,76 +1,33 @@
 ---
 title: Notifications
-description: "Telegram alert setup and event types"
+description: "Telegram notifications — coming soon"
 ---
 
-## Telegram Setup
+<Note>
+Telegram notifications are **coming soon**. The notification system is built and ready — it will be connected to the bot in an upcoming update.
+</Note>
 
-OrdsBot sends real-time alerts via Telegram. Setup takes about 2 minutes.
+## Planned notification events
 
-### 1. Create a Telegram bot
+Once live, OrdsBot will send Telegram alerts for the following events:
 
-Message [@BotFather](https://t.me/BotFather) on Telegram:
+| Event | Description |
+|---|---|
+| Bid filled | A bid was accepted — inscription bought |
+| Floor crash | Floor dropped >15%, all bids cancelled |
+| Outbid | A competitor placed a higher bid |
+| Bid cancelled | Bids cancelled due to market change |
+| Low balance | Bidding wallet balance is running low |
+| Task error | Worker cycle failed |
 
-```
-/newbot
-```
+## How it will work
 
-Follow the prompts to name your bot. BotFather will give you a token like:
-```
-1234567890:AAFXuxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-```
+You will configure a Telegram bot token and chat ID in **Settings → Notifications**. The bot will then send messages to your Telegram for each of the events above.
 
-### 2. Get your Chat ID
+To prepare your Telegram bot in advance:
 
-1. Send any message to your new bot
-2. Visit: `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
-3. Find `"chat":{"id":XXXXXXXXX}` in the response — that number is your Chat ID
-
-For group chats, add the bot to the group first, then send a message and check the same URL.
-
-### 3. Add to OrdsBot Settings
-
-Go to **Settings → Notifications** and enter:
-- **Bot Token**: `1234567890:AAFXuxx...`
-- **Chat ID**: `-100123456789` (note: group chat IDs start with `-100`)
-
----
-
-## Notification Types
-
-### Bid Filled
-
-Sent when a collection bid is accepted by a seller on Satflow.
-
-```
-✅ Bid filled
-Collection: Bitcoin Puppets
-Price: 85,000 sats
-Inscription: abc123...
-```
-
-### Floor Crash
-
-Sent when OrdsBot detects a floor crash (>15% drop) and cancels bids.
-
-```
-⚠️ Floor crash detected
-Collection: NodeMonkes
-Previous floor: 200,000 sats
-Current floor:  165,000 sats (-17.5%)
-All bids cancelled.
-```
-
-### Task Error
-
-Sent when a worker cycle fails due to an API error, auth issue, or unexpected state.
-
-### Listing Live
-
-Sent when an auto-list task successfully creates a listing on Satflow.
-
----
-
-## Testing Notifications
-
-After saving your Telegram settings, click **Send test notification** to verify the connection.
+1. Message [@BotFather](https://t.me/BotFather) and run `/newbot`
+2. Copy the token it gives you
+3. Get your Chat ID by sending a message to the bot, then visiting:
+   `https://api.telegram.org/bot<YOUR_TOKEN>/getUpdates`
+4. Find `"chat":{"id":XXXXXXXXX}` — save that number
