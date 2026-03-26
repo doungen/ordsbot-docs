@@ -1,0 +1,93 @@
+---
+title: Safety Features
+description: "Built-in protections against runaway bids, floor crashes, and overspending"
+---
+
+## Overview
+
+OrdsBot has multiple layers of safety built into the bidding engine. These are not optional — they run on every cycle regardless of your strategy settings.
+
+---
+
+## Floor Crash Protection
+
+If the floor price drops more than **15%** in a single cycle:
+
+- All bids for that task are immediately cancelled
+- The task logs a `floor_crash` event
+- You receive a Telegram notification (if configured)
+- The task continues running the next cycle — bids resume if the floor stabilises
+
+```
+Previous floor: 200,000 sats
+Current floor:  168,000 sats
+Change: -16% → FLOOR CRASH — all bids cancelled
+```
+
+---
+
+## Hardcap
+
+In **% of Floor** mode, you must set a **hardcap** — the absolute maximum price per bid in BTC.
+
+This is a hard ceiling enforced _in addition_ to the floor percentage. Even if the floor percentage would calculate a higher price, the bid will never exceed the hardcap.
+
+**Why this matters:** If the floor data is stale, missing, or has a data error (e.g. floor reported as 10× normal), the hardcap ensures you don't accidentally bid orders of magnitude too high.
+
+```
+Floor: 500,000 sats (data error - floor is actually 50,000)
+Bid % high: 90% → calculated price 450,000 sats
+Hardcap: 0.001 BTC (100,000 sats)
+
+→ Bid capped at 100,000 sats — hardcap prevents the bad bid
+```
+
+---
+
+## Budget Cap (`maxBidTotal`)
+
+Set a maximum total sats committed by this task at any time. Once the sum of all active bid values reaches this limit, no new bids are placed until existing ones are cancelled or filled.
+
+---
+
+## Total Exposure Limit
+
+Platform-wide, there is a **maximum total exposure** across all your tasks (default: 5,000,000 sats). The bot will not place new bids if this limit is reached.
+
+Check your current usage in **Settings → Usage**.
+
+---
+
+## Never Bid Above Floor
+
+The bot enforces a hard rule that ordinals bids are always placed below the current floor:
+
+```
+Ordinals: bid price ≤ floor - 1 sat
+Runes:    bid price ≤ floor × 99.9%
+```
+
+This applies even in Outbid mode — if outbidding a competitor would push the price above floor, the price is clamped.
+
+---
+
+## Graceful Shutdown
+
+When the server shuts down, all running workers stop cleanly. Tasks marked as running are resumed automatically on the next startup — no bids are orphaned.
+
+<Note>
+After a server restart, tasks resume automatically but need wallet keys re-derived before they can place new bids. You'll see a "Waiting for wallet keys" message on affected tasks.
+</Note>
+
+---
+
+## Summary Table
+
+| Protection | Trigger | Action |
+|---|---|---|
+| Floor crash | Floor drops >15% | Cancel all task bids |
+| Hardcap | Calculated price > hardcap | Cap price at hardcap |
+| Budget cap | Total task exposure > maxBidTotal | Stop placing new bids |
+| Exposure limit | Platform total > 5M sats | Stop all new bids |
+| Floor ceiling | Price ≥ floor | Clamp to floor - 1 sat |
+| Min bid | Price < 1,000 sats | Skip bid |

@@ -1,0 +1,88 @@
+---
+title: Create an Auto-List Task
+description: "How to set up automated listing for your inscriptions"
+---
+
+## Prerequisites
+
+Before creating an auto-list task:
+
+1. **Wallet derived** — enter your seed phrase in Settings so the bot has your taproot signing key
+2. **Inscription in your wallet** — the inscription must be at your ordinals address (bc1p...)
+3. **Satflow API key** — added in Settings
+
+---
+
+## Step 1 — Browse your inscriptions
+
+Go to **Auto-List → New Task** and click **Browse Wallet**. OrdsBot fetches all inscriptions from your ordinals address (up to 500).
+
+You'll see each inscription with:
+- Thumbnail image
+- Collection name
+- Current listing status and price (if already listed)
+
+---
+
+## Step 2 — Select an inscription
+
+Click on an inscription to select it. The inscription ID is filled in automatically.
+
+If the inscription belongs to a known collection, the collection ID is also auto-filled from cache.
+
+---
+
+## Step 3 — Configure the listing price
+
+### % of Floor (recommended)
+
+List at a percentage of the current collection floor.
+
+| Field | Example | Notes |
+|---|---|---|
+| Price mode | `% of Floor` | — |
+| Target % | `1.05` | 105% of floor = 5% above floor |
+
+### Fixed price
+
+| Field | Example | Notes |
+|---|---|---|
+| Price mode | `Fixed` | — |
+| Price (sats) | `150000` | Always listed at 150,000 sats |
+
+---
+
+## Step 4 — Start the task
+
+Click **Create** then **Start**. The bot will:
+
+1. Verify the inscription is in your wallet
+2. Request listing PSBTs from Satflow
+3. Sign and submit them
+4. Show the listing as active in your task view
+
+---
+
+## Managing Tasks
+
+### Stop a task
+
+Clicking **Stop** pauses the worker but does **not** cancel the current listing on Satflow. If you want to delist, use the **Delist** button which cancels the listing first, then stops.
+
+### Delete a task
+
+Deleting an auto-list task also cancels the active Satflow listing automatically.
+
+### Force refresh
+
+If OrdsBot's view of your wallet seems out of date, click **Refresh Wallet** to re-fetch from the Satflow API.
+
+---
+
+## Troubleshooting
+
+**"No ordinals address found"** — Your wallet hasn't been derived yet. Go to Settings and enter your seed phrase.
+
+**"Item not found"** — The inscription may not be at your ordinals address, or the Satflow API couldn't find it. Make sure the inscription is at `bc1p...` (taproot), not a Segwit or legacy address.
+
+**Task stuck on "Waiting for wallet keys"** — The server was restarted. Re-derive your wallet in Settings.

@@ -1,0 +1,69 @@
+---
+title: Auto-Listing Overview
+description: "Automatically list your inscriptions on Satflow at a floor-relative price"
+---
+
+## What is Auto-Listing?
+
+Auto-Listing lets you set-and-forget the listing of inscriptions you own. Instead of manually listing each item, you configure a target price (as a % of floor or a fixed amount) and the bot lists it automatically — and updates the price as the floor moves.
+
+---
+
+## How It Works
+
+Each auto-list task monitors one inscription:
+
+```
+1. Fetch your inscription from your ordinals wallet (bc1p...)
+2. Check the current collection floor
+3. Calculate your target list price
+4. If not listed, or listed at wrong price → delist and relist
+5. Repeat every cycle
+```
+
+The bot signs the Satflow listing PSBT using your ordinals taproot key (BIP86 derivation path).
+
+---
+
+## What You Need
+
+- Inscription must be in your **ordinals wallet** (the bc1p... taproot address shown in Settings)
+- Wallet keys must be derived (seed phrase entered in Settings)
+- Satflow API key configured in Settings
+
+---
+
+## Supported Price Modes
+
+| Mode | Description |
+|---|---|
+| `% of Floor` | List at X% of the current collection floor (e.g. 110% = 10% above floor) |
+| `Fixed sats` | List at a fixed price that never changes |
+
+### Floor-relative example
+
+```
+Collection floor: 100,000 sats
+Target: 105% of floor  →  listed at 105,000 sats
+
+Next cycle — floor moves to 120,000 sats:
+→ Listing updated to 126,000 sats automatically
+```
+
+---
+
+## Listing PSBTs
+
+Satflow uses a **3-PSBT listing flow**:
+
+1. Request unsigned listing PSBTs from Satflow (`createListingPSBTs`)
+2. Sign all 3 taproot PSBTs with Schnorr signature (tweaked key)
+3. Submit signed PSBTs (`submitListingPSBTs` round 1) — Satflow returns a compact PSBT
+4. Sign compact PSBT with ECDSA (raw un-tweaked ordinals key)
+5. Submit compact PSBT (`submitListingPSBTs` round 2) → Listed!
+
+This is handled entirely by the bot — you just configure the price.
+
+<Note>
+Your listing receive address (where payment goes when someone buys) is set to your **ordinals address** (bc1p...). Using a payment address (bc1q...) will cause a 500 error from Satflow.
+</Note>

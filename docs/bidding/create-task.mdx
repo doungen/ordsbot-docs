@@ -1,0 +1,151 @@
+---
+title: Create a Task
+description: "Step-by-step guide to creating bidding tasks for Ordinals and Runes"
+---
+
+## Task Configuration
+
+A **task** represents one automated bidding job for a single collection or Rune. Each task runs its own independent cycle.
+
+---
+
+## Required Fields
+
+### Collection / Rune Slug
+
+The Satflow slug for your target collection. Find it in the Satflow URL:
+
+```
+https://satflow.com/collections/bitcoin-puppets
+                                ^^^^^^^^^^^^^^^^
+                                slug = bitcoin-puppets
+```
+
+For Runes, use the Rune ticker (all caps):
+```
+DOGGOTOTHEMOON
+```
+
+### Type
+
+| Value | Use for |
+|---|---|
+| `ordinals` | Ordinals (inscription) collections |
+| `rune` | Rune fungible tokens |
+
+### Bid Mode
+
+| Mode | Description |
+|---|---|
+| `% of Floor` | Bid at a percentage of the live floor price |
+| `Fixed sats` | Bid at a fixed price range in sats (or sats/token for Runes) |
+
+---
+
+## Percent Mode (recommended)
+
+Set a **low** and **high** percentage of the floor price. The bot distributes your bids evenly across this range.
+
+```
+Floor price: 100,000 sats
+Bid percent low:  75%  → 75,000 sats
+Bid percent high: 85%  → 85,000 sats
+Bid count: 5
+
+→ Bids placed at: 75k, 80k, 82.5k, 85k sats (spread evenly)
+```
+
+<Warning>
+**Hardcap is required in % mode.** You must set a maximum price per bid in BTC. This protects you if floor data is missing or incorrect — the bot will never bid above your hardcap regardless of the calculated percentage.
+</Warning>
+
+### Example percent config
+
+| Field | Value |
+|---|---|
+| Bid mode | `% of Floor` |
+| Bid % low | `0.75` |
+| Bid % high | `0.85` |
+| Bid count | `5` |
+| Hardcap | `0.001 BTC` (100,000 sats) |
+
+---
+
+## Fixed Mode
+
+Set absolute prices in sats. Useful when you have a target price and don't want it to move with the floor.
+
+For Runes, prices are in **sats per token** (can be fractional, e.g. `1.08`).
+
+### Example fixed config (Rune)
+
+| Field | Value |
+|---|---|
+| Bid mode | `Fixed sats/token` |
+| Low | `1.00` sats/token |
+| High | `1.20` sats/token |
+| Bid count | `3` |
+| Quantity | `1000` tokens per bid |
+
+---
+
+## Bid Count
+
+The number of simultaneous bids to maintain. The bot will cancel and re-place bids to keep exactly this many active.
+
+- Max per plan: Basic=5, Pro=20, Whale=50
+
+---
+
+## Rune-specific Options
+
+### Quantity Mode
+
+| Mode | Description |
+|---|---|
+| `quantity` | Fixed number of tokens per bid (e.g. 1000 tokens) |
+| `sats` | Fixed sats per order (e.g. 500,000 sats — bot calculates token count) |
+
+### VWAP vs Floor
+
+Enable **Use UniSat VWAP** to price your bids based on the volume-weighted average price from the UniSat order book rather than the Satflow floor. Requires a `depthSats` value (the sats of order book depth to analyse, e.g. 1,000,000).
+
+---
+
+## Advanced Options
+
+### Budget cap (`maxBidTotal`)
+
+Maximum total sats committed to this task at any time. The bot won't place more bids once this is reached.
+
+### Loop interval (`loopSeconds`)
+
+How often the bot cycle runs for this task. Default: 30 seconds.
+
+### Bid expiry (`bidExpiryMinutes`)
+
+How long bids stay active on Satflow before auto-expiring. Default: 16 minutes.
+
+### Fee rate (`feeRate`)
+
+Used for PSBT transactions (listing). Options: `fastestFee`, `halfHourFee`, `hourFee`, `minimumFee`, or a number (sats/vbyte).
+
+### `updateBidEnabled`
+
+If enabled (default: on), the bot replaces bids when the floor moves more than 1% from the current bid price. Disable this to keep bids stable even as the market shifts.
+
+### `onlyBidIfHighest`
+
+When enabled with outbid mode, the bot cancels all bids if it is not the current highest bidder.
+
+---
+
+## Trait Tasks
+
+To bid on a specific trait:
+
+1. Set **Bid type** to `Trait`
+2. Enter the **Trait type** (e.g. `Background`) and **Trait value** (e.g. `Gold`)
+3. The collection floor is not used — set your own price range
+
+The bot fetches and caches trait data from Satflow automatically.

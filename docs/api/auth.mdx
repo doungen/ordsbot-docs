@@ -1,0 +1,126 @@
+---
+title: Auth API
+description: "Endpoints for wallet-based authentication"
+---
+
+## POST /api/auth/challenge
+
+Request a sign-in challenge for a Bitcoin address.
+
+During beta, the address must be whitelisted. Admin addresses bypass the whitelist.
+
+### Request body
+
+```json
+{
+  "address": "bc1q..."
+}
+```
+
+### Response
+
+```json
+{
+  "challengeId": "550e8400-e29b-41d4-a716-446655440000",
+  "message": "Sign in to OrdsBot: a1b2c3d4e5f6",
+  "expiresAt": 1700000300
+}
+```
+
+### Errors
+
+| Code | Error |
+|---|---|
+| 400 | Invalid Bitcoin address format |
+| 403 | Address not whitelisted for beta access |
+
+---
+
+## POST /api/auth/verify
+
+Submit the wallet signature to authenticate and receive a session token.
+
+### Request body
+
+```json
+{
+  "challengeId": "550e8400-e29b-41d4-a716-446655440000",
+  "address": "bc1q...",
+  "signature": "base64-encoded-signature",
+  "publicKey": "02abc..."
+}
+```
+
+`publicKey` is optional but recommended — it speeds up verification for some wallet types.
+
+### Response
+
+```json
+{
+  "token": "your-session-token",
+  "user": {
+    "id": 1,
+    "address": "bc1q...",
+    "ordinalsAddress": "bc1p...",
+    "plan": "beta",
+    "isAdmin": false
+  }
+}
+```
+
+### Errors
+
+| Code | Error |
+|---|---|
+| 400 | Missing required fields |
+| 401 | Invalid signature or expired challenge |
+
+---
+
+## POST /api/auth/logout
+
+Invalidate the current session. Requires authentication.
+
+### Response
+
+```json
+{ "success": true }
+```
+
+---
+
+## GET /api/auth/me
+
+Returns the authenticated user's profile, plan limits, and usage stats.
+
+### Response
+
+```json
+{
+  "id": 1,
+  "address": "bc1q...",
+  "ordinalsAddress": "bc1p...",
+  "displayName": null,
+  "plan": "beta",
+  "planDetails": {
+    "name": "Beta Tester",
+    "maxTasks": 100,
+    "maxBidsPerTask": 10,
+    "priceSats": 0,
+    "durationDays": 90
+  },
+  "isAdmin": false,
+  "subscription": {
+    "plan": "beta",
+    "expiresAt": "2026-06-14T00:00:00.000Z",
+    "status": "active"
+  },
+  "stats": {
+    "taskCount": 3,
+    "maxTasks": 100,
+    "exposure": 1200000,
+    "maxExposure": 5000000
+  },
+  "createdAt": "2026-03-26T00:00:00.000Z"
+}
+```

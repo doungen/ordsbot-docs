@@ -1,0 +1,133 @@
+---
+title: Authentication
+description: "How OrdsBot authenticates users with Bitcoin wallet signatures"
+---
+
+## BIP-322 Wallet Auth
+
+OrdsBot uses **BIP-322 message signing** — the Bitcoin standard for proving address ownership without exposing private keys.
+
+The flow:
+
+```
+1. Client: POST /api/auth/challenge  { address: "bc1q..." }
+2. Server: returns { challengeId, message, expiresAt }
+3. Client: signs message with wallet → signature
+4. Client: POST /api/auth/verify  { challengeId, address, signature, publicKey }
+5. Server: verifies signature → returns { token, user }
+```
+
+Challenges expire after **5 minutes**. Sessions are server-side and invalidated on logout.
+
+---
+
+## Beta Whitelist
+
+During beta, only whitelisted addresses can sign in. If an address is not whitelisted, the challenge endpoint returns `403` with:
+
+```json
+{
+  "error": "Address not whitelisted for beta access",
+  "message": "This address has not been approved for the beta. Contact the admin to request access."
+}
+```
+
+Admin addresses (configured in server settings) bypass the whitelist.
+
+---
+
+## Session Token
+
+After successful verification, the server returns a **session token**. Include it in requests as a Bearer token:
+
+```
+Authorization: Bearer <token>
+```
+
+---
+
+## Endpoints
+
+### `POST /api/auth/challenge`
+
+Request a sign-in challenge for a Bitcoin address.
+
+**Request:**
+```json
+{
+  "address": "bc1q..."
+}
+```
+
+**Response:**
+```json
+{
+  "challengeId": "uuid",
+  "message": "Sign in to OrdsBot: <nonce>",
+  "expiresAt": 1700000000
+}
+```
+
+---
+
+### `POST /api/auth/verify`
+
+Submit the signed challenge to create a session.
+
+**Request:**
+```json
+{
+  "challengeId": "uuid",
+  "address": "bc1q...",
+  "signature": "base64...",
+  "publicKey": "02abc..."
+}
+```
+
+**Response:**
+```json
+{
+  "token": "session_token",
+  "user": {
+    "id": 1,
+    "address": "bc1q...",
+    "plan": "beta",
+    "isAdmin": false
+  }
+}
+```
+
+---
+
+### `POST /api/auth/logout`
+
+Invalidate the current session. Requires auth.
+
+---
+
+### `GET /api/auth/me`
+
+Returns the current user's profile, plan details, and usage stats. Requires auth.
+
+**Response:**
+```json
+{
+  "id": 1,
+  "address": "bc1q...",
+  "ordinalsAddress": "bc1p...",
+  "plan": "beta",
+  "planDetails": {
+    "name": "Beta Tester",
+    "maxTasks": 100,
+    "maxBidsPerTask": 10,
+    "priceSats": 0,
+    "durationDays": 90
+  },
+  "stats": {
+    "taskCount": 3,
+    "maxTasks": 100,
+    "exposure": 1200000,
+    "maxExposure": 5000000
+  }
+}
+```

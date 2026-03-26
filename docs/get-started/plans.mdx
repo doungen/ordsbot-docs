@@ -1,0 +1,46 @@
+---
+title: Plans & Limits
+description: "Subscription plans, task limits, and the beta program"
+---
+
+## Beta Program
+
+OrdsBot is currently in **closed beta**. Beta users get full access to the platform at no cost for 90 days.
+
+To join the beta, contact the team on Discord with your Bitcoin address and you'll be added to the whitelist.
+
+| Plan | Price | Tasks | Bids per task | Duration |
+|---|---|---|---|---|
+| **Beta** | Free | 100 | 10 | 90 days |
+| **Basic** | 50,000 sats/mo | 3 | 5 | 30 days |
+| **Pro** | 150,000 sats/mo | 10 | 20 | 30 days |
+| **Whale** | 500,000 sats/mo | 25 | 50 | 30 days |
+
+<Note>
+Prices are in sats (satoshis). 1 BTC = 100,000,000 sats.
+</Note>
+
+---
+
+## Platform Limits
+
+In addition to per-plan limits, the following platform-wide limits apply:
+
+| Limit | Default |
+|---|---|
+| Max total exposure | 5,000,000 sats |
+| Satflow API rate | 5 req/s, 10 burst |
+| Floor cache TTL | 60 seconds |
+| Challenge expiry | 5 minutes |
+
+### Total Exposure
+
+The **total exposure** is the sum of all active bid values across all your tasks. Once the limit is reached, the bot will not place new bids until existing ones are cancelled or filled.
+
+You can check your current exposure in **Settings → Usage**.
+
+---
+
+## Payments
+
+Paid plans are processed via **BTCPay Server** — fully on-chain, no custodian. You'll receive a Bitcoin invoice when purchasing a plan. Payment confirmation triggers immediate plan activation.

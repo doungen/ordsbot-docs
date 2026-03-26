@@ -1,0 +1,68 @@
+---
+title: Bidding Overview
+description: "How the OrdsBot bidding engine works"
+---
+
+## How Bidding Works
+
+The OrdsBot bidding engine runs as a background worker for each active task. Every cycle (default 30 seconds) it:
+
+```
+1. Fetch the current floor price for your collection
+2. Run floor crash safety check (cancel all if >15% drop)
+3. Fetch your active bids from Satflow
+4. Calculate the ideal bid prices based on your strategy
+5. Compare ideal vs current — find what to cancel and place
+6. Cancel stale bids
+7. Sign and submit new bids
+8. Record results for your dashboard
+```
+
+The bot uses Satflow's **bidding wallet** model — your sats are held in a multi-sig address and collateral is locked per bid. When a bid is filled, Satflow transfers the inscription to your ordinals address.
+
+---
+
+## Bid Types
+
+### Collection Bids (default)
+
+Bid on any item in a collection. The floor price for the collection is fetched from Satflow's API and used as the price reference.
+
+### Trait Bids
+
+Bid on items with a specific trait (e.g. `Background: Gold`). Trait bids ignore the collection floor as the reference — instead you set your own fixed or percent range.
+
+<Note>
+Trait bids require fetching the collection's trait data. OrdsBot caches this automatically when you create a trait task.
+</Note>
+
+---
+
+## Supported Asset Types
+
+| Type | How floor is measured |
+|---|---|
+| `ordinals` | Satflow collection floor (sats per inscription) |
+| `rune` | Satflow order book floor or UniSat VWAP (sats per token) |
+
+---
+
+## Bid Cycle Frequency
+
+The default cycle interval is **30 seconds**. You can customize this per task with `loopSeconds`. Lower values use more API quota.
+
+| Setting | Value |
+|---|---|
+| Default interval | 30 seconds |
+| API rate limit | 5 req/s, 10 burst |
+| Bid expiry | 16 minutes (default) |
+
+---
+
+## Bid Expiry
+
+Satflow bids have a configurable expiry. The default is **16 minutes**, which means the bot refreshes all bids roughly twice before they expire. You can change the expiry per task.
+
+<Tip>
+Short expiry (e.g. 5 min) = more API calls, always fresh prices. Long expiry (e.g. 60 min) = fewer calls, bids may lag the market.
+</Tip>

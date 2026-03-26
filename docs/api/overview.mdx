@@ -1,0 +1,56 @@
+---
+title: API Overview
+description: "OrdsBot REST API — endpoints, authentication, and base URL"
+---
+
+## Base URL
+
+All API endpoints are served from:
+
+```
+https://ordsbot.com/api
+```
+
+---
+
+## Authentication
+
+Include your session token in the `Authorization` header:
+
+```
+Authorization: Bearer <token>
+```
+
+Get a token via the [Auth endpoints](/docs/api/auth) (wallet challenge/verify flow).
+
+---
+
+## Response Format
+
+All responses are JSON. Errors follow this shape:
+
+```json
+{
+  "error": "Description of what went wrong",
+  "details": ["optional array of validation errors"]
+}
+```
+
+## Status Codes
+
+| Code | Meaning |
+|---|---|
+| 200 | Success |
+| 400 | Bad request / validation error |
+| 401 | Not authenticated |
+| 403 | Forbidden (plan limit, whitelist, or admin required) |
+| 404 | Resource not found |
+| 409 | Conflict (e.g. duplicate task) |
+| 429 | Rate limited |
+| 500 | Server error |
+
+---
+
+## Rate Limits
+
+The OrdsBot API itself has no rate limit on authenticated requests. However, all task workers and floor price lookups are subject to Satflow's API limits (5 req/s, 10 burst, 100k/month per key).

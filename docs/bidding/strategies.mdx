@@ -1,0 +1,95 @@
+---
+title: Bidding Strategies
+description: "Spread and Outbid strategies explained with examples"
+---
+
+## Strategy 1: Spread (default)
+
+The **Spread** strategy distributes your bids evenly across your configured price range.
+
+### How it works
+
+Given a range of `rangeLow` to `rangeHigh` and `bidCount` slots, the bot calculates evenly spaced price points and places one bid at each.
+
+```
+Floor: 200,000 sats
+Range: 75% – 90%  →  150,000 – 180,000 sats
+Bid count: 4
+
+Prices: 150,000 | 160,000 | 170,000 | 180,000
+```
+
+### When to use Spread
+
+- You want passive buy-wall coverage across a price range
+- You're not trying to be the top bid — just acquire at a discount
+- Lower API usage (fewer updates needed)
+
+---
+
+## Strategy 2: Outbid
+
+The **Outbid** strategy actively monitors competitor offers and places bids just above them.
+
+Enable it by toggling **Outbid Mode** on a task.
+
+### Outbid amount modes
+
+| Mode | Description | Example |
+|---|---|---|
+| `fixed` | Add a fixed number of sats above competitor | competitor + 1,000 sats |
+| `percent` | Bid a % above competitor | competitor × 1.01 (1% above) |
+
+### How it works
+
+1. Bot fetches the current offer book for your collection
+2. Finds competitor offers within your configured range
+3. Places bids just above each competitor (up to your bid count)
+4. Caps at your `rangeHigh` — never exceeds your configured maximum
+
+```
+Competitor offers: 155,000 | 162,000 | 171,000
+Outbid amount: 1,000 sats fixed
+
+Bot bids: 156,000 | 163,000 | 172,000
+```
+
+If there are no competitors, the bot falls back to a spread at `rangeLow`.
+
+### `onlyBidIfHighest`
+
+When this is enabled alongside Outbid mode, the bot cancels all bids if it's not currently the highest bidder. Useful for aggressive "top-of-book" strategies.
+
+---
+
+## Price Safety Rules
+
+The bot enforces these invariants regardless of strategy:
+
+| Rule | Detail |
+|---|---|
+| Never above floor | Ordinals bids capped at `floor - 1 sat` |
+| Rune floor cap | Rune bids capped at `floor × 99.9%` |
+| Hardcap | Never exceeds your configured hardcap |
+| 1000-sat rounding | Ordinals bids rounded down to nearest 1,000 sats |
+| Minimum bid | Ordinals: 1,000 sats. Runes: total order value ≥ 10,000 sats |
+
+### Floor crash protection
+
+If the floor price drops more than **15%** in a single cycle compared to the previous cycle, the bot **cancels all bids for that task immediately**.
+
+This protects against sudden floor collapses where your bids would be filled at prices that are no longer representative of the market.
+
+---
+
+## Update Threshold
+
+The bot considers a bid "stale" (needs updating) if:
+
+```
+|current_bid_price - ideal_price| / ideal_price > 1%
+```
+
+Bids within 1% of the ideal price are left alone to reduce unnecessary cancels and API calls.
+
+You can disable bid updating entirely with `updateBidEnabled: false`.

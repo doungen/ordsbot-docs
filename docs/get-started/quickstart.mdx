@@ -1,0 +1,83 @@
+---
+title: Quickstart
+description: "Go from zero to placing your first automated bid in under 5 minutes"
+---
+
+## Step 1 — Connect your wallet
+
+Go to [ordsbot.com](https://ordsbot.com) and click **Connect Wallet**.
+
+OrdsBot uses **BIP-322 wallet authentication** — you prove ownership of your Bitcoin address by signing a short message. No seed phrase is ever shared.
+
+<Note>
+During the beta, access is whitelisted. If you see "Address not whitelisted", contact the team on Discord to request access.
+</Note>
+
+Supported wallets:
+- **Xverse** (recommended)
+- **Unisat**
+- Any wallet that supports BIP-322 message signing
+
+---
+
+## Step 2 — Derive your bidding wallet
+
+The bidding bot needs keys in memory to sign bid messages on Satflow. Go to **Settings → Wallet** and enter your seed phrase.
+
+<Warning>
+Your seed phrase is used only to derive keys in server memory. It is **never stored** to disk or database. The server must re-derive after a restart — you will be prompted automatically.
+</Warning>
+
+After deriving, you'll see:
+- **Payment address** (bc1q...) — fund this with sats for your bids
+- **Ordinals address** (bc1p...) — your taproot address for inscriptions
+- **Bidding wallet** — the Satflow multi-sig address where bid collateral is held
+
+---
+
+## Step 3 — Add your Satflow API key
+
+In **Settings → API Keys**, paste your Satflow API key.
+
+Don't have one? [Open a ticket on Satflow Discord](https://discord.gg/satflow) to request a key.
+
+---
+
+## Step 4 — Fund your bidding wallet
+
+Send Bitcoin to your **Payment address** (bc1q...). The bot uses this to fund bids on Satflow's multi-sig bidding system.
+
+A rough guide for getting started:
+- **Single collection, 5 bids**: ~500,000–1,000,000 sats
+- **Multiple collections**: scale accordingly per your `maxBidTotal` settings
+
+---
+
+## Step 5 — Create your first task
+
+Go to **Tasks → New Task** and fill in:
+
+| Field | Example | Notes |
+|---|---|---|
+| Collection slug | `bitcoin-puppets` | From the Satflow URL |
+| Type | `ordinals` | Or `rune` for Runes |
+| Bid mode | `% of Floor` | Or Fixed sats |
+| Range | 75% – 85% | Bids at 75–85% of floor |
+| Bid count | `5` | Number of concurrent bids |
+| Hardcap | `0.001 BTC` | Max price per bid |
+
+Hit **Save**, then click **Start**.
+
+---
+
+## Step 6 — Watch it run
+
+The bot cycle runs every **30 seconds** by default. In the task detail view you can see:
+- Current floor price
+- Your active bids and prices
+- Last cycle status
+- Fill history
+
+<Tip>
+Enable **Telegram notifications** in Settings to get instant alerts when a bid is filled.
+</Tip>

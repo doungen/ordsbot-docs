@@ -1,0 +1,102 @@
+---
+title: Auto-List API
+description: "Create and manage auto-listing tasks for inscriptions"
+---
+
+## GET /api/autolist
+
+List all auto-list tasks for the authenticated user.
+
+---
+
+## POST /api/autolist
+
+Create a new auto-list task.
+
+### Request body
+
+```json
+{
+  "inscriptionId": "abc123i0",
+  "collectionId": "bitcoin-puppets",
+  "priceMode": "percent",
+  "pricePercent": 1.05
+}
+```
+
+If `collectionId` is not provided, it is auto-filled from cache if the inscription was previously fetched.
+
+### Response
+
+Returns the created task object.
+
+### Errors
+
+| Code | Error |
+|---|---|
+| 400 | `inscriptionId` is required |
+| 409 | Task already exists for this inscription |
+
+---
+
+## GET /api/autolist/:id
+
+Get a single auto-list task.
+
+---
+
+## PUT /api/autolist/:id
+
+Update an auto-list task's config. Restarts the worker if running.
+
+---
+
+## DELETE /api/autolist/:id
+
+Delete the task and cancel the active Satflow listing (if any).
+
+---
+
+## POST /api/autolist/:id/start
+
+Start the listing worker for this task.
+
+---
+
+## POST /api/autolist/:id/stop
+
+Stop the listing worker. Does **not** cancel the active listing on Satflow.
+
+---
+
+## GET /api/autolist/wallet/ordinals
+
+Fetch all inscriptions from the authenticated user's ordinals address.
+
+Returns up to 500 inscriptions with name, image, collection, and current listing status.
+
+### Response
+
+```json
+[
+  {
+    "id": "abc123i0",
+    "name": "Bitcoin Puppet #1234",
+    "collectionId": "bitcoin-puppets",
+    "collectionName": "Bitcoin Puppets",
+    "imageUrl": "https://...",
+    "listed": true,
+    "listingPrice": 90000
+  }
+]
+```
+
+Add `?refresh=1` to force a fresh fetch from the API (bypasses cache).
+
+---
+
+## GET /api/autolist/item/:inscriptionId
+
+Get full details for a single inscription.
+
+Add `?refresh=1` to bypass cache.

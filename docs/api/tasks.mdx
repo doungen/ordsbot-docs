@@ -1,0 +1,171 @@
+---
+title: Tasks API
+description: "Create and manage bidding tasks"
+---
+
+## GET /api/tasks
+
+List all tasks for the authenticated user.
+
+### Response
+
+```json
+[
+  {
+    "id": 1,
+    "slug": "bitcoin-puppets",
+    "type": "ordinals",
+    "isRunning": true,
+    "config": { ... },
+    "lastCycle": { "time": 1700000000, "action": "placed 3 bids" },
+    "lastError": null,
+    "createdAt": "2026-03-26T00:00:00.000Z"
+  }
+]
+```
+
+---
+
+## POST /api/tasks
+
+Create a new bidding task. Returns `409` if a task already exists for this collection.
+
+### Request body
+
+```json
+{
+  "slug": "bitcoin-puppets",
+  "type": "ordinals",
+  "bidMode": "percent",
+  "bidPercentLow": 0.75,
+  "bidPercentHigh": 0.85,
+  "bidCount": 5,
+  "hardcapSats": 100000
+}
+```
+
+See all fields in the [Task Config reference](#task-config-fields) below.
+
+### Response
+
+Returns the created task object.
+
+### Errors
+
+| Code | Error |
+|---|---|
+| 400 | Validation error — see `details` array |
+| 403 | Plan task limit reached |
+| 409 | Task already exists for this slug |
+
+---
+
+## GET /api/tasks/:id
+
+Get a single task by ID. Returns `404` if task doesn't belong to the user.
+
+---
+
+## PUT /api/tasks/:id
+
+Update a task's config. If the task is running, it is restarted automatically with the new config.
+
+### Request body
+
+Any subset of task config fields. Only provided fields are updated.
+
+---
+
+## DELETE /api/tasks/:id
+
+Delete a task. If running, the worker is stopped first.
+
+---
+
+## POST /api/tasks/:id/start
+
+Start the task worker.
+
+---
+
+## POST /api/tasks/:id/stop
+
+Stop the task worker. The task's DB state is persisted as `is_running: false`.
+
+---
+
+## GET /api/tasks/:id/bids
+
+Get the currently active bids for this task (fetched from Satflow, not local DB).
+
+---
+
+## GET /api/tasks/floor
+
+Fetch the current floor price for a collection (used for task config preview).
+
+**Query params:** `slug` (required), `type` (default: `ordinals`)
+
+### Response
+
+```json
+{
+  "floorPrice": 100000,
+  "listedCount": 142
+}
+```
+
+---
+
+## GET /api/tasks/rune-market
+
+Fetch floor price + VWAP data for a Rune ticker.
+
+**Query params:** `ticker` (required), `depth` (sats of order book depth, default: 1000000)
+
+### Response
+
+```json
+{
+  "ticker": "DOGGOTOTHEMOON",
+  "floor": 1.08,
+  "vwap": 1.12,
+  "depthSats": 1000000
+}
+```
+
+---
+
+## Task Config Fields
+
+All fields and their defaults:
+
+| Field | Type | Default | Description |
+|---|---|---|---|
+| `slug` | string | required | Collection slug or Rune ticker |
+| `type` | string | `ordinals` | `ordinals` or `rune` |
+| `bidMode` | string | `percent` | `percent` or `fixed` |
+| `bidPercentLow` | number | `0.15` | Low end of bid range (fraction of floor) |
+| `bidPercentHigh` | number | `0.75` | High end of bid range (fraction of floor) |
+| `bidFixedLow` | number | `10000` | Low end in sats (fixed mode) |
+| `bidFixedHigh` | number | `50000` | High end in sats (fixed mode) |
+| `bidCount` | number | `5` | Number of concurrent bids |
+| `hardcapSats` | number | `0` | Max price per bid in sats (required in percent mode) |
+| `maxBidTotal` | number | `0` | Max total sats for this task (0 = unlimited) |
+| `bidExpiryMinutes` | number | `null` | Override bid expiry (null = server default 16 min) |
+| `loopSeconds` | number | `null` | Override cycle interval (null = server default 30s) |
+| `outbidEnabled` | boolean | `false` | Enable outbid strategy |
+| `outbidMode` | string | `fixed` | `fixed` or `percent` |
+| `outbidAmount` | number | `1000` | Sats to add above competitor (fixed mode) |
+| `outbidPercent` | number | `0.01` | % to add above competitor (percent mode) |
+| `updateBidEnabled` | boolean | `true` | Replace bids when market moves |
+| `onlyBidIfHighest` | boolean | `false` | Cancel bids if not highest bidder |
+| `bidType` | string | `collection` | `collection` or `trait` |
+| `traitType` | string | `""` | Trait category (trait bids only) |
+| `traitValue` | string | `""` | Trait value (trait bids only) |
+| `quantity` | number | `1` | Tokens per bid (Runes, quantity mode) |
+| `quantityMode` | string | `quantity` | `quantity` or `sats` (Runes only) |
+| `satsPerOrder` | number | `0` | Target sats per order (Runes, sats mode) |
+| `useVwap` | boolean | `false` | Use UniSat VWAP instead of floor (Runes) |
+| `depthSats` | number | `1000000` | Order book depth for VWAP (Runes) |
+| `feeRate` | string/number | `halfHourFee` | Fee rate for PSBTs |

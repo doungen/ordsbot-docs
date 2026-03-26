@@ -1,0 +1,61 @@
+---
+title: Introduction
+description: "OrdsBot — automated bidding and listing for Bitcoin Ordinals & Runes on Satflow"
+---
+
+<img
+  className="block dark:hidden"
+  src="/images/hero-light.png"
+  alt="OrdsBot dashboard"
+/>
+<img
+  className="hidden dark:block"
+  src="/images/hero-dark.png"
+  alt="OrdsBot dashboard"
+/>
+
+## What is OrdsBot?
+
+OrdsBot is a non-custodial SaaS platform that runs automated collection bids and auto-listings on [Satflow](https://satflow.com) — the leading Bitcoin Ordinals and Runes marketplace.
+
+You connect your Bitcoin wallet once (signing a message — no seed phrase required), configure your bidding strategy, and the bot handles everything: watching floor prices, placing bids, cancelling stale orders, and alerting you when a bid gets filled.
+
+## Key Features
+
+<CardGroup cols={2}>
+  <Card title="Collection Bidding" icon="arrow-trend-up">
+    Bid on Ordinals collections and Runes simultaneously with spread or outbid strategies.
+  </Card>
+  <Card title="Auto-Listing" icon="tag">
+    Automatically list your inscriptions at a target price relative to the collection floor.
+  </Card>
+  <Card title="Trait Bidding" icon="fingerprint">
+    Target specific trait categories within a collection for more precise bids.
+  </Card>
+  <Card title="Floor Crash Protection" icon="shield">
+    All bids are cancelled automatically if the floor drops more than 15% in a single cycle.
+  </Card>
+  <Card title="Non-Custodial" icon="key">
+    Connect with a BIP-322 wallet signature. Your seed phrase never leaves your device.
+  </Card>
+  <Card title="Telegram Alerts" icon="bell">
+    Real-time notifications for fills, errors, and bid updates sent to your Telegram.
+  </Card>
+</CardGroup>
+
+## Supported Assets
+
+| Asset type | Marketplace | Status |
+|---|---|---|
+| Ordinals (Inscriptions) | Satflow | ✅ Live |
+| Runes | Satflow | ✅ Live |
+| Trait bids | Satflow | ✅ Live |
+
+## How It Works (in 30 seconds)
+
+1. **Connect wallet** — Sign a challenge message with your Bitcoin wallet (Xverse, Unisat, etc.)
+2. **Derive keys** — Enter your seed phrase in Settings to generate your bidding wallet (stays in memory only, never stored)
+3. **Create a task** — Pick a collection or Rune, set your bid strategy and budget
+4. **Start the bot** — It runs in the cloud every 30 seconds, updating bids as the floor moves
+
+Ready to go? Start with the [Quickstart guide →](/docs/get-started/quickstart)

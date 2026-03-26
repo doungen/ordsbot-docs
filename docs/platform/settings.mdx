@@ -1,0 +1,73 @@
+---
+title: Settings
+description: "Configure your wallet, API keys, and profile"
+---
+
+## Wallet Settings
+
+### Derive Wallet
+
+Enter your seed phrase (12 or 24 words) to derive your bidding keys in server memory.
+
+The server derives:
+- **Payment key** (BIP84, bc1q...) — signs bid messages
+- **Ordinals key** (BIP86, bc1p...) — signs listing PSBTs
+
+<Warning>
+Your seed phrase is used only to derive keys into RAM. It is never stored. You need to re-enter it after a server restart.
+</Warning>
+
+After deriving, you'll see your:
+- Payment address (bc1q...)
+- Ordinals address (bc1p...)
+- Satflow bidding wallet address
+
+### Ordinals Address Override
+
+If you hold inscriptions at a different taproot address (e.g. from a hardware wallet), you can set a custom ordinals address in Settings. This does not affect key derivation.
+
+---
+
+## API Keys
+
+### Satflow API Key
+
+Required for all bidding and listing operations. Get yours by opening a ticket on the [Satflow Discord](https://discord.gg/satflow).
+
+The key is stored encrypted in the database and used for all your task workers.
+
+### UniSat API Key
+
+Optional. Required only if you want to use **VWAP pricing** for Rune tasks (UniSat order book data).
+
+---
+
+## Telegram Notifications
+
+Set up Telegram alerts to get real-time notifications.
+
+1. Create a bot via [@BotFather](https://t.me/BotFather) on Telegram
+2. Copy the bot token (format: `123456:ABC-DEF...`)
+3. Get your Chat ID (send a message to your bot, then check `https://api.telegram.org/bot<token>/getUpdates`)
+4. Paste both into Settings → Notifications
+
+### Notification events
+
+| Event | Description |
+|---|---|
+| Bid filled | A bid was accepted — inscription bought |
+| Floor crash | Floor dropped >15%, all bids cancelled |
+| Task error | Worker encountered an error |
+| Listing live | Auto-list task successfully listed an inscription |
+
+---
+
+## Usage & Exposure
+
+The Settings page shows your current usage:
+
+| Metric | Description |
+|---|---|
+| Active tasks | Running vs plan max |
+| Total exposure | Sum of all active bid values |
+| Max exposure | Platform limit (5M sats default) |
