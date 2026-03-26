@@ -25,7 +25,7 @@ Supported wallets:
 The bidding bot needs signing keys in memory to place bids on Satflow. Go to **Settings → Wallet** and enter your seed phrase.
 
 <Warning>
-Your seed phrase is entered in your browser only. All key derivation happens locally in your browser — only the private signing keys are sent to the bot's server memory for automated bid signing. Your seed phrase never leaves your device. Keys are held in server RAM only and are lost on restart — you will be prompted to re-derive automatically.
+Your private signing keys are sent to the bot's server RAM for automated bid signing. The server has full signing authority over your bidding addresses while the bot is running. Keys are never written to disk or the database, and are lost on server restart — you will be prompted to re-derive automatically.
 </Warning>
 
 After deriving, you'll see:

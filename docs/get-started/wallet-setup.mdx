@@ -39,7 +39,7 @@ The bidding bot requires keys in server memory to sign Satflow bid messages. The
 | Ordinals key | BIP86 (m/86'/0'/0'/0/0) | Taproot key for inscriptions |
 
 <Warning>
-All key derivation happens locally in your browser — your seed phrase never leaves your device. Only the private signing keys are sent to the bot's server memory so the worker can sign bids automatically. Keys are never written to disk or the database. If the server restarts, you need to re-derive — you will see a "Waiting for wallet keys" warning on your tasks.
+Your private signing keys are sent to the bot's server RAM so the worker can sign bids automatically. The server has full signing authority over your bidding addresses while the bot is running — treat OrdsBot as a trusted signing agent. Keys are never written to disk or the database, and are lost on server restart. You will see a "Waiting for wallet keys" warning on your tasks when re-derivation is needed.
 </Warning>
 
 ### What the bot uses your keys for
