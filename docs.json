@@ -1,15 +1,12 @@
 {
-  "$schema": "https://mintlify.com/schema.json",
+  "$schema": "https://mintlify.com/docs.json",
   "name": "OrdsBot",
   "theme": "mint",
   "favicon": "/images/favicon.svg",
   "colors": {
     "primary": "#F7931A",
     "light": "#FDB347",
-    "dark": "#C67A0E",
-    "background": {
-      "dark": "#0D0D0D"
-    }
+    "dark": "#C67A0E"
   },
   "topbarLinks": [
     {
@@ -21,58 +18,69 @@
     "name": "Launch App",
     "url": "https://ordsbot.com"
   },
-  "tabs": [],
-  "anchors": [
-    {
-      "name": "Discord",
-      "icon": "discord",
-      "url": "https://discord.gg/ordsbot"
-    }
-  ],
-  "navigation": [
-    {
-      "group": "Get Started",
-      "pages": [
-        "docs/get-started/introduction",
-        "docs/get-started/quickstart",
-        "docs/get-started/wallet-setup",
-        "docs/get-started/plans"
-      ]
-    },
-    {
-      "group": "Bidding Bot",
-      "pages": [
-        "docs/bidding/overview",
-        "docs/bidding/create-task",
-        "docs/bidding/strategies",
-        "docs/bidding/safety"
-      ]
-    },
-    {
-      "group": "Auto-Listing",
-      "pages": [
-        "docs/autolist/overview",
-        "docs/autolist/create-task"
-      ]
-    },
-    {
-      "group": "Platform",
-      "pages": [
-        "docs/platform/authentication",
-        "docs/platform/settings",
-        "docs/platform/notifications"
-      ]
-    },
-    {
-      "group": "API Reference",
-      "pages": [
-        "docs/api/overview",
-        "docs/api/auth",
-        "docs/api/tasks",
-        "docs/api/autolist"
-      ]
-    }
-  ],
+  "navigation": {
+    "anchors": [
+      {
+        "name": "Discord",
+        "icon": "discord",
+        "url": "https://discord.gg/ordsbot"
+      }
+    ],
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Get Started",
+            "pages": [
+              "docs/get-started/introduction",
+              "docs/get-started/quickstart",
+              "docs/get-started/wallet-setup",
+              "docs/get-started/plans"
+            ]
+          },
+          {
+            "group": "Bidding Bot",
+            "pages": [
+              "docs/bidding/overview",
+              "docs/bidding/create-task",
+              "docs/bidding/strategies",
+              "docs/bidding/safety"
+            ]
+          },
+          {
+            "group": "Auto-Listing",
+            "pages": [
+              "docs/autolist/overview",
+              "docs/autolist/create-task"
+            ]
+          },
+          {
+            "group": "Platform",
+            "pages": [
+              "docs/platform/authentication",
+              "docs/platform/settings",
+              "docs/platform/notifications"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "API Reference",
+            "pages": [
+              "docs/api/overview",
+              "docs/api/auth",
+              "docs/api/tasks",
+              "docs/api/autolist"
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "footerSocials": {
     "twitter": "https://twitter.com/ordsbot"
   }
