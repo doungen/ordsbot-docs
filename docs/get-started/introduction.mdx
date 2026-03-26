@@ -1,13 +1,15 @@
 ---
-title: Introduction
+title: "Introduction"
 description: "OrdsBot — automated bidding and listing for Bitcoin Ordinals & Runes on Satflow"
 ---
 
 <img
   className="block dark:hidden"
-  src="/images/hero-light.png"
-  alt="OrdsBot dashboard"
+  src="/images/Screenshot2026-03-26051010.png"
+  alt="Screenshot2026 03 26051010"
+  title="Screenshot2026 03 26051010"
 />
+
 <img
   className="hidden dark:block"
   src="/images/hero-dark.png"
@@ -18,7 +20,7 @@ description: "OrdsBot — automated bidding and listing for Bitcoin Ordinals & R
 
 OrdsBot is a non-custodial SaaS platform that runs automated collection bids and auto-listings on [Satflow](https://satflow.com) — the leading Bitcoin Ordinals and Runes marketplace.
 
-You connect your Bitcoin wallet once (signing a message), configure your bidding strategy, and the bot handles everything: watching floor prices, placing bids, and cancelling stale orders.
+You connect your Bitcoin wallet once (signing a message), import your bidding wallet, configure your bidding strategy, and the bot handles everything: watching floor prices, placing bids, and cancelling stale orders.
 
 ## Key Features
 
@@ -26,18 +28,25 @@ You connect your Bitcoin wallet once (signing a message), configure your bidding
   <Card title="Collection Bidding" icon="arrow-trend-up">
     Bid on Ordinals collections and Runes simultaneously with spread or outbid strategies.
   </Card>
+
   <Card title="Auto-Listing" icon="tag">
     Automatically list your inscriptions at a target price relative to the collection floor.
   </Card>
+
   <Card title="Trait Bidding" icon="fingerprint">
     Target specific trait categories within a collection for more precise bids.
   </Card>
+
   <Card title="Floor Crash Protection" icon="shield">
     All bids are cancelled automatically if the floor drops more than 15% in a single cycle.
+  </Card>
+  <Card title="Non-Custodial" icon="key">
+    Your seed phrase never leaves your browser. Keys are derived locally — only the private signing keys are sent to the bot's server memory for automated bid signing.
   </Card>
   <Card title="Key Security" icon="key">
     Private signing keys are held in the bot's server RAM while the bot runs — never written to disk or database. You re-grant access each session. Treat OrdsBot as a trusted signing agent for your bidding addresses.
   </Card>
+
   <Card title="Telegram Alerts" icon="bell">
     Real-time Telegram notifications for fills, errors, and bid updates — coming soon.
   </Card>
@@ -46,7 +55,7 @@ You connect your Bitcoin wallet once (signing a message), configure your bidding
 ## Supported Assets
 
 | Asset type | Marketplace | Status |
-|---|---|---|
+| --- | --- | --- |
 | Ordinals (Inscriptions) | Satflow | ✅ Live |
 | Runes | Satflow | ✅ Live |
 | Trait bids | Satflow | ✅ Live |

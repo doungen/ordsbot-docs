@@ -1,5 +1,5 @@
 ---
-title: Wallet Setup
+title: "Wallet Setup"
 description: "How wallet authentication and key derivation work in OrdsBot"
 ---
 
@@ -18,7 +18,7 @@ These are typically from the same seed phrase but can be different addresses.
 
 When you connect your wallet, OrdsBot follows a challenge-response flow:
 
-```
+```text
 1. Your browser requests a challenge for your Bitcoin address
 2. OrdsBot returns a unique challenge string (expires in 5 minutes)
 3. You sign the challenge with your wallet
@@ -34,18 +34,18 @@ Your session is tied to your Bitcoin address — no username or password require
 The bidding bot requires keys in server memory to sign Satflow bid messages. These are derived from your seed phrase using standard Bitcoin derivation paths:
 
 | Key | Path | Purpose |
-|---|---|---|
+| --- | --- | --- |
 | Payment key | BIP84 (m/84'/0'/0'/0/0) | Signs bid messages, receives payments |
 | Ordinals key | BIP86 (m/86'/0'/0'/0/0) | Taproot key for inscriptions |
 
 <Warning>
-Your private signing keys are sent to the bot's server RAM so the worker can sign bids automatically. The server has full signing authority over your bidding addresses while the bot is running — treat OrdsBot as a trusted signing agent. Keys are never written to disk or the database, and are lost on server restart. You will see a "Waiting for wallet keys" warning on your tasks when re-derivation is needed.
+  Your private signing keys are sent to the bot's server RAM so the bot can sign bids automatically. The server has full signing authority over your bidding addresses while the bot is running. Keys are never written to disk or the database, and are lost on server restart. You will see a "Waiting for wallet keys" warning on your tasks when re-derivation is needed.
 </Warning>
 
 ### What the bot uses your keys for
 
 - Signing the Satflow bid message string:
-  ```
+  ```text
   <payment_addr>:<payment_pubkey>:<token_receive_addr>:<price>:<quantity>:<expiry>:<slug>:<timestamp>
   ```
 - Signing PSBTs for auto-listing inscriptions (Taproot Schnorr signatures)
@@ -62,4 +62,4 @@ Satflow uses a **bidding wallet** model where your bid collateral is held in a 2
 
 - The bot only needs your seed phrase once per server session
 - Sessions use secure, signed tokens stored in server memory
-- There is no password recovery — if you lose your seed phrase, you lose your wallet
+- There is no password recovery = if you lose your seed phrase, you lose your wallet

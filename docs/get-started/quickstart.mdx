@@ -1,5 +1,5 @@
 ---
-title: Quickstart
+title: "Quickstart"
 description: "Go from zero to placing your first automated bid in under 5 minutes"
 ---
 
@@ -10,11 +10,12 @@ Go to [ordsbot.com](https://ordsbot.com) and click **Connect Wallet**.
 OrdsBot uses **BIP-322 wallet authentication** — you prove ownership of your Bitcoin address by signing a short message. No seed phrase is ever shared.
 
 <Note>
-During the beta, access is whitelisted. If you see "Address not whitelisted", contact the team on Discord to request access.
+  During the beta, access is whitelisted. If you see "Address not whitelisted", contact the team on Discord to request access.
 </Note>
 
 Supported wallets:
-- **Xverse** (recommended)
+
+- **Xverse**
 - **Unisat**
 - **Leather**
 
@@ -25,10 +26,11 @@ Supported wallets:
 The bidding bot needs signing keys in memory to place bids on Satflow. Go to **Settings → Wallet** and enter your seed phrase.
 
 <Warning>
-Your private signing keys are sent to the bot's server RAM for automated bid signing. The server has full signing authority over your bidding addresses while the bot is running. Keys are never written to disk or the database, and are lost on server restart — you will be prompted to re-derive automatically.
+  Your private signing keys are sent to the bot's server RAM for automated bid signing. The server has full signing authority over your bidding addresses while the bot is running. Keys are never written to disk or the database, and are lost on server restart - you will be prompted to re-derive automatically.
 </Warning>
 
 After deriving, you'll see:
+
 - **Payment address** (bc1q...) — your native SegWit address
 - **Ordinals address** (bc1p...) — your taproot address for inscriptions
 - **Bidding wallet** — the Satflow multi-sig address where bid collateral is held
@@ -45,10 +47,10 @@ Don't have one? [Open a ticket on Satflow Discord](https://discord.gg/satflow) t
 
 ## Step 4 — Fund your bidding wallet
 
-After deriving your wallet, your **Satflow bidding address** is shown in **Settings → Wallet**. This is a Satflow-managed multi-sig address — send Bitcoin here to fund your bids.
+After deriving your wallet, your **Satflow bidding address** is shown in **Settings → Wallet**. This is a Satflow-managed multi-sig address \> send Bitcoin here to fund your bids.
 
 <Note>
-You can also check your bidding address at any time in the Settings page after wallet setup.
+  You can also check your bidding address at any time in the Settings page after wallet setup.
 </Note>
 
 ---
@@ -58,12 +60,12 @@ You can also check your bidding address at any time in the Settings page after w
 Go to **Tasks → New Task** and fill in:
 
 | Field | Example | Notes |
-|---|---|---|
+| --- | --- | --- |
 | Collection slug | `bitcoin-puppets` | From the Satflow URL |
 | Type | `ordinals` | Or `rune` for Runes |
 | Bid mode | `% of Floor` | Or Fixed sats |
 | Range | 75% – 85% | Bids at 75–85% of floor |
-| Bid count | `5` | Number of concurrent bids |
+| Bid count | `1` | Number of concurrent bids |
 | Hardcap | `0.001 BTC` | Max price per bid |
 
 Hit **Save**, then click **Start**.
@@ -73,11 +75,8 @@ Hit **Save**, then click **Start**.
 ## Step 6 — Watch it run
 
 The bot cycle runs every **30 seconds** by default. In the task detail view you can see:
+
 - Current floor price
 - Your active bids and prices
 - Last cycle status
 - Fill history
-
-<Tip>
-Telegram notifications are coming soon. Check the dashboard for fill history in the meantime.
-</Tip>
